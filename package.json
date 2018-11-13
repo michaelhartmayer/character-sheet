@@ -1,0 +1,33 @@
+{
+  "name": "character-sheet",
+  "version": "1.0.0",
+  "description": "CharacterSheet library for assembling relationships between stats and modifiers.",
+  "main": "./dist/character-sheet.js",
+  "scripts": {
+    "build": "babel ./src/character-sheet.js -d dist",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/michaelhartmayer/character-sheet.git"
+  },
+  "keywords": [
+    "Character",
+    "Sheet",
+    "Game",
+    "Dungeons",
+    "Dragons"
+  ],
+  "author": "Michael Hartmayer <michaelhartmayer@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/michaelhartmayer/character-sheet/issues"
+  },
+  "homepage": "https://github.com/michaelhartmayer/character-sheet#readme",
+  "devDependencies": {
+    "@babel/core": "^7.1.6",
+    "@babel/plugin-proposal-class-properties": "^7.1.0",
+    "@babel/plugin-transform-runtime": "^7.1.0",
+    "@babel/preset-env": "^7.1.6"
+  }
+}
