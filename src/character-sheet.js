@@ -239,4 +239,4 @@ const CharacterSheetFactory = () => {
   return CharacterSheet;
 };
 
-export default CharacterSheetFactory;
+module.exports = CharacterSheetFactory;
