@@ -1,4 +1,4 @@
-# Character Sheet
+# Character Sheet (Preview)
 CharacterSheet library for assembling relationships between stats and modifiers.
 
 ## Getting Started
@@ -37,3 +37,13 @@ myPlayersSheet("strength").set(14);
 // show all calculated values
 myPlayersSheet.getSheet(); // { strength: 14, 'strength-modifier': 2 }
 ```
+
+## CharacterSheet()
+### returns a new `Character Sheet Class`
+
+## CharacterSheet Class
+### define(name)
+
+## CharacterSheet Class Instance
+### modifier(name)
+
