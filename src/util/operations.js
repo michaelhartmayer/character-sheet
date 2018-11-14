@@ -6,11 +6,33 @@ const addOperation = (operation = {}) => ({
   }
 });
 
+// helper: context shortcuts
+const metaContext = definition => ({
+  default: default_(definition),
+  describe: describe(definition)
+});
+
+const dependencyContext = definition => ({
+  using: using(definition)
+});
+
+const mathContext = definition => ({
+  add: add(definition),
+  subtract: subtract(definition),
+  addOne: addOne(definition),
+  subtractOne: subtractOne(definition),
+  calculate: calculate(definition)
+});
+
 // entry point: define
 const define = (definition = {}) => (name = "") => {
   definition.name = name;
   definition.type = "definition";
-  return { default: default_(definition), describe: describe(definition) };
+
+  return {
+    ...dependencyContext(definition),
+    ...metaContext(definition)
+  };
 };
 
 // entry point: modifier
@@ -27,10 +49,7 @@ const modifies = (definition = {}) => target => {
   }).to(definition);
 
   return {
-    add: add(definition),
-    subtract: subtract(definition),
-    addOne: addOne(definition),
-    subtractOne: subtractOne(definition)
+    ...mathContext(definition)
   };
 };
 
@@ -38,10 +57,9 @@ const describe = (definition = {}) => (description = null) => {
   definition.description = description;
 
   return {
-    default: default_(definition),
-    using: using(definition),
-    addOne: addOne(definition),
-    modifies: modifies(definition)
+    ...metaContext(definition),
+    ...dependencyContext(definition),
+    ...mathContext(definition)
   };
 };
 
@@ -58,7 +76,7 @@ const using = (definition = {}) => (...targets) => {
   }).to(definition);
 
   return {
-    calculate: calculate(definition)
+    ...mathContext(definition)
   };
 };
 
@@ -69,10 +87,7 @@ const add = (definition = {}) => value => {
   }).to(definition);
 
   return {
-    add: add(definition),
-    subtract: subtract(definition),
-    addOne: addOne(definition),
-    subtractOne: subtractOne(definition),
+    ...mathContext(definition),
     modifies: modifies(definition)
   };
 };
@@ -84,10 +99,7 @@ const subtract = (definition = {}) => value => {
   }).to(definition);
 
   return {
-    add: add(definition),
-    subtract: subtract(definition),
-    addOne: addOne(definition),
-    subtractOne: addOne(definition)
+    ...mathContext(definition)
   };
 };
 
@@ -100,10 +112,7 @@ const addOne = (definition = {}) => target => ({
     }).to(definition);
 
     return {
-      add: add(definition),
-      subtract: subtract(definition),
-      addOne: addOne(definition),
-      subtractOne: subtractOne(definition)
+      ...mathContext(definition)
     };
   }
 });
@@ -117,10 +126,7 @@ const subtractOne = (definition = {}) => target => ({
     }).to(definition);
 
     return {
-      add: add(definition),
-      subtract: subtract(definition),
-      addOne: addOne(definition),
-      subtractOne: subtractOne(definition)
+      ...mathContext(definition)
     };
   }
 });
@@ -132,9 +138,7 @@ const calculate = (definition = {}) => fn => {
   }).to(definition);
 
   return {
-    add: add(definition),
-    subtract: subtract(definition),
-    addOne: addOne(definition)
+    ...mathContext(definition)
   };
 };
 

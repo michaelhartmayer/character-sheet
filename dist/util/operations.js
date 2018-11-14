@@ -1,4 +1,4 @@
-"use strict";Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0; // helper: add operation to a definition
+"use strict";var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");Object.defineProperty(exports, "__esModule", { value: true });exports.default = void 0;var _objectSpread2 = _interopRequireDefault(require("@babel/runtime/helpers/objectSpread")); // helper: add operation to a definition
 var addOperation = function addOperation() {var operation = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};return {
     to: function to(definition) {
       definition.operations = definition.operations || [];
@@ -6,11 +6,33 @@ var addOperation = function addOperation() {var operation = arguments.length > 0
     } };};
 
 
+// helper: context shortcuts
+var metaContext = function metaContext(definition) {return {
+    default: default_(definition),
+    describe: describe(definition) };};
+
+
+var dependencyContext = function dependencyContext(definition) {return {
+    using: using(definition) };};
+
+
+var mathContext = function mathContext(definition) {return {
+    add: add(definition),
+    subtract: subtract(definition),
+    addOne: addOne(definition),
+    subtractOne: subtractOne(definition),
+    calculate: calculate(definition) };};
+
+
 // entry point: define
 var define = function define() {var definition = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};return function () {var name = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : "";
     definition.name = name;
     definition.type = "definition";
-    return { default: default_(definition), describe: describe(definition) };
+
+    return (0, _objectSpread2.default)({},
+    dependencyContext(definition),
+    metaContext(definition));
+
   };};
 
 // entry point: modifier
@@ -26,22 +48,18 @@ var modifies = function modifies() {var definition = arguments.length > 0 && arg
       target: target }).
     to(definition);
 
-    return {
-      add: add(definition),
-      subtract: subtract(definition),
-      addOne: addOne(definition),
-      subtractOne: subtractOne(definition) };
+    return (0, _objectSpread2.default)({},
+    mathContext(definition));
 
   };};
 
 var describe = function describe() {var definition = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};return function () {var description = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : null;
     definition.description = description;
 
-    return {
-      default: default_(definition),
-      using: using(definition),
-      addOne: addOne(definition),
-      modifies: modifies(definition) };
+    return (0, _objectSpread2.default)({},
+    metaContext(definition),
+    dependencyContext(definition),
+    mathContext(definition));
 
   };};
 
@@ -57,8 +75,8 @@ var using = function using() {var definition = arguments.length > 0 && arguments
       targets: targets.concat() }).
     to(definition);
 
-    return {
-      calculate: calculate(definition) };
+    return (0, _objectSpread2.default)({},
+    mathContext(definition));
 
   };};
 
@@ -68,12 +86,9 @@ var add = function add() {var definition = arguments.length > 0 && arguments[0] 
       value: value }).
     to(definition);
 
-    return {
-      add: add(definition),
-      subtract: subtract(definition),
-      addOne: addOne(definition),
-      subtractOne: subtractOne(definition),
-      modifies: modifies(definition) };
+    return (0, _objectSpread2.default)({},
+    mathContext(definition), {
+      modifies: modifies(definition) });
 
   };};
 
@@ -83,11 +98,8 @@ var subtract = function subtract() {var definition = arguments.length > 0 && arg
       value: value }).
     to(definition);
 
-    return {
-      add: add(definition),
-      subtract: subtract(definition),
-      addOne: addOne(definition),
-      subtractOne: addOne(definition) };
+    return (0, _objectSpread2.default)({},
+    mathContext(definition));
 
   };};
 
@@ -99,11 +111,8 @@ var addOne = function addOne() {var definition = arguments.length > 0 && argumen
           n: n }).
         to(definition);
 
-        return {
-          add: add(definition),
-          subtract: subtract(definition),
-          addOne: addOne(definition),
-          subtractOne: subtractOne(definition) };
+        return (0, _objectSpread2.default)({},
+        mathContext(definition));
 
       } };};};
 
@@ -116,11 +125,8 @@ var subtractOne = function subtractOne() {var definition = arguments.length > 0 
           n: n }).
         to(definition);
 
-        return {
-          add: add(definition),
-          subtract: subtract(definition),
-          addOne: addOne(definition),
-          subtractOne: subtractOne(definition) };
+        return (0, _objectSpread2.default)({},
+        mathContext(definition));
 
       } };};};
 
@@ -131,10 +137,8 @@ var calculate = function calculate() {var definition = arguments.length > 0 && a
       fn: fn }).
     to(definition);
 
-    return {
-      add: add(definition),
-      subtract: subtract(definition),
-      addOne: addOne(definition) };
+    return (0, _objectSpread2.default)({},
+    mathContext(definition));
 
   };};
 
