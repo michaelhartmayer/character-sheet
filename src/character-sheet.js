@@ -69,7 +69,9 @@ const CharacterSheetFactory = () => {
         return definition;
       }
 
-      let value = _sheetDefinitions[name].defaultValue;
+      let value =
+        this._characterDefinitions[name] ||
+        _sheetDefinitions[name].defaultValue;
 
       // next apply an overridden value
       if (
@@ -200,7 +202,10 @@ const CharacterSheetFactory = () => {
         return inventory(def);
       } else {
         return {
-          set: value => (this._characterDefinitions[name] = { value }),
+          set: value => {
+            this._characterDefinitions[name] = { value };
+            this._publish();
+          },
           description: () => this.getDescription(name),
           value: () => this.getValue(name)
         };
