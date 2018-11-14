@@ -69,7 +69,9 @@ var CharacterSheetFactory = function CharacterSheetFactory() {
           return definition;
         }
 
-        var value = _sheetDefinitions[name].defaultValue;
+        var value =
+        this._characterDefinitions[name] ||
+        _sheetDefinitions[name].defaultValue;
 
         // next apply an overridden value
         if (
@@ -200,7 +202,10 @@ var CharacterSheetFactory = function CharacterSheetFactory() {
           return inventory(def);
         } else {
           return {
-            set: function set(value) {return _this5._characterDefinitions[name] = { value: value };},
+            set: function set(value) {
+              _this5._characterDefinitions[name] = { value: value };
+              _this5._publish();
+            },
             description: function description() {return _this5.getDescription(name);},
             value: function value() {return _this5.getValue(name);} };
 
