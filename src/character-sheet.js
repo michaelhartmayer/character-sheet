@@ -69,9 +69,12 @@ const CharacterSheetFactory = () => {
         return definition;
       }
 
+      // false is a value we want to use, but ordinary || would be falsey
       let value =
-        this._characterDefinitions[name] ||
-        _sheetDefinitions[name].defaultValue;
+        this._characterDefinitions[name] === null ||
+        this._characterDefinitions[name] === undefined
+          ? _sheetDefinitions[name].defaultValue
+          : this._characterDefinitions[name];
 
       // next apply an overridden value
       if (
@@ -203,7 +206,7 @@ const CharacterSheetFactory = () => {
       } else {
         return {
           set: value => {
-            this._characterDefinitions[name] = { value };
+            this._characterDefinitions[name] = value;
             this._publish();
           },
           description: () => this.getDescription(name),
