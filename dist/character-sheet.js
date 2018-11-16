@@ -69,9 +69,12 @@ var CharacterSheetFactory = function CharacterSheetFactory() {
           return definition;
         }
 
+        // false is a value we want to use, but ordinary || would be falsey
         var value =
-        this._characterDefinitions[name] ||
-        _sheetDefinitions[name].defaultValue;
+        this._characterDefinitions[name] === null ||
+        this._characterDefinitions[name] === undefined ?
+        _sheetDefinitions[name].defaultValue :
+        this._characterDefinitions[name];
 
         // next apply an overridden value
         if (
@@ -181,7 +184,7 @@ var CharacterSheetFactory = function CharacterSheetFactory() {
       } }, { key: "getCharacterDefinition", value: function getCharacterDefinition(
 
       name) {
-        var def = this._characterDefinitions[name] || {};
+        var def = this._characterDefinitions[name];
         this._characterDefinitions[name] = def;
 
         return def;
@@ -203,7 +206,7 @@ var CharacterSheetFactory = function CharacterSheetFactory() {
         } else {
           return {
             set: function set(value) {
-              _this5._characterDefinitions[name] = { value: value };
+              _this5._characterDefinitions[name] = value;
               _this5._publish();
             },
             description: function description() {return _this5.getDescription(name);},
