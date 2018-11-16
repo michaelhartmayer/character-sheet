@@ -184,7 +184,7 @@ const CharacterSheetFactory = () => {
     }
 
     getCharacterDefinition(name) {
-      const def = this._characterDefinitions[name] || {};
+      const def = this._characterDefinitions[name];
       this._characterDefinitions[name] = def;
 
       return def;
