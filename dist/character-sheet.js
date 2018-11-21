@@ -1,11 +1,11 @@
-"use strict";var _interopRequireDefault = require("@babel/runtime/helpers/interopRequireDefault");var _toConsumableArray2 = _interopRequireDefault(require("@babel/runtime/helpers/toConsumableArray"));var _classCallCheck2 = _interopRequireDefault(require("@babel/runtime/helpers/classCallCheck"));var _createClass2 = _interopRequireDefault(require("@babel/runtime/helpers/createClass"));var _defineProperty2 = _interopRequireDefault(require("@babel/runtime/helpers/defineProperty"));var _operations2 = _interopRequireDefault(require("./util/operations"));var
+"use strict";var _stringify = require("babel-runtime/core-js/json/stringify");var _stringify2 = _interopRequireDefault(_stringify);var _keys = require("babel-runtime/core-js/object/keys");var _keys2 = _interopRequireDefault(_keys);var _toConsumableArray2 = require("babel-runtime/helpers/toConsumableArray");var _toConsumableArray3 = _interopRequireDefault(_toConsumableArray2);var _classCallCheck2 = require("babel-runtime/helpers/classCallCheck");var _classCallCheck3 = _interopRequireDefault(_classCallCheck2);var _createClass2 = require("babel-runtime/helpers/createClass");var _createClass3 = _interopRequireDefault(_createClass2);var _operations2 = require("./util/operations");var _operations3 = _interopRequireDefault(_operations2);function _interopRequireDefault(obj) {return obj && obj.__esModule ? obj : { default: obj };}var
 
-_define = _operations2.default.define,_modifier = _operations2.default.modifier,inventory = _operations2.default.inventory;
+_define = _operations3.default.define,_modifier = _operations3.default.modifier,inventory = _operations3.default.inventory;
 
 var CharacterSheetFactory = function CharacterSheetFactory() {
   var _sheetDefinitions = {};var
 
-  CharacterSheet = /*#__PURE__*/function () {(0, _createClass2.default)(CharacterSheet, null, [{ key: "define", value: function define(
+  CharacterSheet = function () {(0, _createClass3.default)(CharacterSheet, null, [{ key: "define", value: function define(
 
 
 
@@ -16,7 +16,7 @@ var CharacterSheetFactory = function CharacterSheetFactory() {
         return _define(def)(name);
       } }]);
 
-    function CharacterSheet() {var _this = this;var json = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};(0, _classCallCheck2.default)(this, CharacterSheet);(0, _defineProperty2.default)(this, "_characterDefinitions", {});(0, _defineProperty2.default)(this, "_subscriptions", []);
+    function CharacterSheet() {var _this = this;var json = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};(0, _classCallCheck3.default)(this, CharacterSheet);this._characterDefinitions = {};this._subscriptions = [];
       this._characterDefinitions = json;
 
       var query = function query(name) {
@@ -32,7 +32,7 @@ var CharacterSheetFactory = function CharacterSheetFactory() {
 
 
       return query;
-    }(0, _createClass2.default)(CharacterSheet, [{ key: "getDescription", value: function getDescription(
+    }(0, _createClass3.default)(CharacterSheet, [{ key: "getDescription", value: function getDescription(
 
       name) {
         var sheetDefinition = _sheetDefinitions[name] || {};
@@ -49,9 +49,9 @@ var CharacterSheetFactory = function CharacterSheetFactory() {
 
         // inventory of values
         if (this.isInventory(name)) {
-          var _inventory = (0, _toConsumableArray2.default)(
+          var _inventory = [].concat((0, _toConsumableArray3.default)(
           _sheetDefinitions[name] && _sheetDefinitions[name].inventory ||
-          []).concat((0, _toConsumableArray2.default)(
+          []), (0, _toConsumableArray3.default)(
           this._characterDefinitions[name] &&
           this._characterDefinitions[name].inventory ||
           []));
@@ -91,7 +91,7 @@ var CharacterSheetFactory = function CharacterSheetFactory() {
         var operations = _sheetDefinitions[name].operations || [];
 
         // next add character modifications
-        Object.keys(this._characterDefinitions).map(function (defName) {
+        (0, _keys2.default)(this._characterDefinitions).map(function (defName) {
           var definition = _this2._characterDefinitions[defName];
 
           // find only inventories
@@ -143,7 +143,7 @@ var CharacterSheetFactory = function CharacterSheetFactory() {
               break;
             case "calculate":
               // value = new Function("return " + operation.fn.toString())(...using);
-              value = operation.fn.apply(operation, (0, _toConsumableArray2.default)(using));
+              value = operation.fn.apply(operation, (0, _toConsumableArray3.default)(using));
               break;
             case "addOneForEvery":
               value += Math.floor(_this3.getValue(operation.target) / operation.n);
@@ -176,7 +176,7 @@ var CharacterSheetFactory = function CharacterSheetFactory() {
       {var _this4 = this;
         var sheet = {};
 
-        Object.keys(_sheetDefinitions).forEach(function (name) {
+        (0, _keys2.default)(_sheetDefinitions).forEach(function (name) {
           sheet[name] = _this4.getValue(name);
         });
 
@@ -237,10 +237,10 @@ var CharacterSheetFactory = function CharacterSheetFactory() {
 
       {
         console.log("=== Sheet Definitions ===");
-        console.log(JSON.stringify(_sheetDefinitions, null, 2));
+        console.log((0, _stringify2.default)(_sheetDefinitions, null, 2));
 
         console.log("=== Character Definitions ===");
-        console.log(JSON.stringify(this._characterDefinitions, null, 2));
+        console.log((0, _stringify2.default)(this._characterDefinitions, null, 2));
       } }]);return CharacterSheet;}();
 
 
