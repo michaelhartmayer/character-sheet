@@ -97,7 +97,8 @@ var CharacterSheetFactory = function CharacterSheetFactory() {
           // find only inventories
           if (_this2.isInventory(defName)) {
             // go through each item and apply its operations
-            definition.inventory.forEach(function (inv) {
+            // definition.inventory.forEach(inv => {
+            definition.forEach(function (inv) {
               // definition of item in inventory
               var invDef = _this2._characterDefinitions[inv];
 
