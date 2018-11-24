@@ -17,7 +17,7 @@ var CharacterSheetFactory = function CharacterSheetFactory() {
       } }]);
 
     function CharacterSheet() {var _this = this;var json = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : {};(0, _classCallCheck3.default)(this, CharacterSheet);this._characterDefinitions = {};this._subscriptions = [];
-      this._characterDefinitions = json;
+      this._characterDefinitions = json || {};
 
       var query = function query(name) {
         if (name) return _this.query(name);

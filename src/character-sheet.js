@@ -17,7 +17,7 @@ const CharacterSheetFactory = () => {
     }
 
     constructor(json = {}) {
-      this._characterDefinitions = json;
+      this._characterDefinitions = json || {};
 
       const query = name => {
         if (name) return this.query(name);
@@ -97,7 +97,8 @@ const CharacterSheetFactory = () => {
         // find only inventories
         if (this.isInventory(defName)) {
           // go through each item and apply its operations
-          definition.inventory.forEach(inv => {
+          // definition.inventory.forEach(inv => {
+          definition.forEach(inv => {
             // definition of item in inventory
             const invDef = this._characterDefinitions[inv];
 
