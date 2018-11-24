@@ -51,6 +51,7 @@ describe("CharacterSheet()", () => {
     beforeEach(() => {
       TestSheet = CharacterSheet();
       TestSheet.define("abc").default(123);
+      TestSheet.define("xyz").default([]);
       testSheet = new TestSheet();
     });
 
@@ -69,6 +70,12 @@ describe("CharacterSheet()", () => {
         it(".set()", () => {
           testSheet("abc").set(111);
           expect(testSheet("abc").value()).toBe(111);
+        });
+      });
+
+      describe(".isInventory()", () => {
+        it("can detect if a property is an inventory", () => {
+          expect(testSheet.isInventory("xyz")).toBe(true);
         });
       });
     });

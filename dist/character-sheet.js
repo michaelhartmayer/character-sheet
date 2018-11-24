@@ -25,11 +25,16 @@ var CharacterSheetFactory = function CharacterSheetFactory() {
         return _this;
       };
 
-      ["subscribe", "unsubscribe", "modifier", "debug", "getSheet"].forEach(
-      function (fnName) {
+      [
+      "subscribe",
+      "unsubscribe",
+      "modifier",
+      "debug",
+      "getSheet",
+      "isInventory"].
+      forEach(function (fnName) {
         query[fnName] = function () {return _this[fnName].apply(_this, arguments);};
       });
-
 
       return query;
     }(0, _createClass3.default)(CharacterSheet, [{ key: "getDescription", value: function getDescription(
@@ -97,8 +102,8 @@ var CharacterSheetFactory = function CharacterSheetFactory() {
           // find only inventories
           if (_this2.isInventory(defName)) {
             // go through each item and apply its operations
-            // definition.inventory.forEach(inv => {
-            definition.forEach(function (inv) {
+            (definition.inventory || []).forEach(function (inv) {
+              // definition.forEach(inv => {
               // definition of item in inventory
               var invDef = _this2._characterDefinitions[inv];
 
@@ -165,7 +170,6 @@ var CharacterSheetFactory = function CharacterSheetFactory() {
       } }, { key: "_processOperation", value: function _processOperation(
 
       value, operation) {
-        console.log(operation.type);
         switch (operation.type) {}
 
       } }, { key: "getSheetDefinition", value: function getSheetDefinition(

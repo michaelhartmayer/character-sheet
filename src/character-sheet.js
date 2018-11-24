@@ -25,11 +25,16 @@ const CharacterSheetFactory = () => {
         return this;
       };
 
-      ["subscribe", "unsubscribe", "modifier", "debug", "getSheet"].forEach(
-        fnName => {
-          query[fnName] = (...args) => this[fnName](...args);
-        }
-      );
+      [
+        "subscribe",
+        "unsubscribe",
+        "modifier",
+        "debug",
+        "getSheet",
+        "isInventory"
+      ].forEach(fnName => {
+        query[fnName] = (...args) => this[fnName](...args);
+      });
 
       return query;
     }
@@ -97,8 +102,8 @@ const CharacterSheetFactory = () => {
         // find only inventories
         if (this.isInventory(defName)) {
           // go through each item and apply its operations
-          // definition.inventory.forEach(inv => {
-          definition.forEach(inv => {
+          (definition.inventory || []).forEach(inv => {
+            // definition.forEach(inv => {
             // definition of item in inventory
             const invDef = this._characterDefinitions[inv];
 
@@ -165,7 +170,6 @@ const CharacterSheetFactory = () => {
     }
 
     _processOperation(value, operation) {
-      console.log(operation.type);
       switch (operation.type) {
       }
     }
