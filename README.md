@@ -1,252 +1,273 @@
-# Character-Sheet (Preview)
+# Character-Sheet 2.0
 
-## Create a new Character Sheet Class
-A character sheet class represents a game system. It contains all the rules to wire up any values that must be calculated.
+## Getting Started
+
+> Add the library to your project.
+
+```sh
+$ yarn add character-sheet
+```
+
+> Import it into your project
 
 ```js
-// create a new CharacterSheet Class
+import CharacterSheet from 'character-sheet';
+```
+
+You can also import and CharacterSheet Classes that are prebuilt. (@TODO, Link to Contribute)
+
+## CharacterSheet Factory
+
+### `CharacterSheet()`
+
+> Creates a new `CharacterSheet Class`. This generically represents your game's character sheet rules.
+
+```js
+// import the library
+import CharacterSheet from 'character-sheet';
+
+// generate a new CharacterSheet Class
 const TableDungeons = CharacterSheet();
 ```
 
-## Define Stats and Rules
-A stat represents a primitive value that you might find on a character sheet. Simple stats include `Number`, `String`, and `Boolean`. An empty array `[]` is also supported, to define inventories.
+## CharacterSheet Class
 
-### .define(name `String`) -> ModifierChain `Object`
-Define a stat by a name (`String`). The `ModifierChain` is returned in scope of the thing you have just defined, exposing other utilities.
+### new CharacterSheet(optionalSheet `Object`) -> `ChainableQueryContext`
+
+> Creates a `CharacterSheet Instance`. This represents your player or npc.
+
+#### optionalSheet `Object`
+A previously `.export()`'d `CharacterSheet Object`
+
 
 ```js
-// create a new CharacterSheet Class
+// import the library
+import CharacterSheet from 'character-sheet';
+
+// generate a new CharacterSheet Class
 const TableDungeons = CharacterSheet();
 
-// define a stat on it called 'mana'
-TableDungeons.define('mana');
+// instantiate a character sheet for a player
+const sirKnight = new TableDungeon();
 ```
 
-## ModifierChain `Object`
 
-### .initially(value `Number or String or Boolean`)
-Sets the initial value of this stat before calculations begin.
+
+### .define(key `String`) -> `ChainableContext`
+
+> Define a new **Stat** on your `CharacterSheet Class`
+
+### .export() -> `Object`
+
+> Exports a JSON object of the
+
+
+
+## Chainables
+
+## CharacterSheet Object
+
+
+
+
+## Examples
+
+### Example 1: Dungeons and Dragons - Stat Modifiers
+Let's replicate the functionality of Dungeons and Dragons style stat modifiers. The rule is: whatever your stat is, your stat modifier is that number divided by 2, rounded down, subtract 5.
+
+For example:
+- Stat is **15** 
+- 15 / 2 = **7.5**
+- Round Down 7.5 = **7**
+- 7 - 5 = **2** 
+- Stat Modifier is **2**.
+
+> Let's build our CharacterSheet Class, called `TableDungeons`.
 
 ```js
-// create a new CharacterSheet Class
+// import the library
+import CharacterSheet from 'character-sheet';
+
+// generate a new CharacterSheet Class
 const TableDungeons = CharacterSheet();
 
-// define a stat
-TableDungeons
+// define whatever stats to attach to CharacterSheet Class
+const stats = ['strength', 'dexterity', 'charisma'];
 
-  // call it called 'mana'
-  .define('mana')
+// loop over each stat - 'strength', 'dexterity', 'charisma'
+stats.forEach(stat => {
   
-  // set its initial value to 100
-  .initially(100);
+  // define the stat - ex: 'strength'
+  TableDungeons
+    .define(stat)
+    .initially(10);
+
+  // define that stat modifier - ex: 'strength-modifier'
+  TableDungeons
+
+    // define the stat
+    .define(`${stat}-modifier`)
+
+    // set its initial value
+    .initially(0)
+
+    // pull stat into the calculation context
+    .using(stat)
+
+    // caclulate the final value
+    .calculate(stat => (stat / 2) - 5);
+});
 ```
 
-### .add(value `Number`) -> ModifierChain `Object`
-Adds an arbitrary value to the calculation.
-
-#### .subtract(value, `Number`) -> ModifierChain `Object`
-Behaves the same way but subtracts.
+> Let's create our `CharacterSheet Instance` of the `CharacterSheet Class` called `sirKnight`.
 
 ```js
-// create a new CharacterSheet Class
+// sirKnights previously exported sheet
+const savedSheet = {
+  strength: 8,
+  dexterity: 10,
+  charisma: 18
+};
+
+// instantiate a character sheet for a player
+const sirKnight = new TableDungeon(savedSheet);
+
+// the modifiers are calculated and vailable for query
+sirKnight('strength-modifier').is();  // -1
+sirKnight('dexterity-modifier').is(); //  0
+sirKnight('charisma-modifier').is();  //  4
+```
+
+### Example 2: Talents, Equipment, and Inventory
+In most table top games, there are ways to augment your character as you go. These kinds of things can include **inventory**, **spells**, **equipment**, **talents**, and so on. 
+
+In this example we'll work with **passive talents**, active **equipment**, and an **inventory** which holds items not currently equipped.
+
+> Let's build our CharacterSheet Class, called `TableDungeons`.
+
+```js
+// import the library
+import CharacterSheet from 'character-sheet';
+
+// generate a new CharacterSheet Class
 const TableDungeons = CharacterSheet();
-
-// define a stat
-TableDungeons
-
-  // call it called 'mana'
-  .define('mana')
-  
-  // set its initial value to 100
-  .initially(100)
-  
-  // add 25
-  .add(25);
 ```
 
-### .add(value `String`) -> ModifierChain `Object`
-Adds the calculated value of `value` to the calculation.
-
-#### .subtract(value, `String`) -> ModifierChain `Object`
-Behaves the same way but subtracts.
+> We'll add 3 inventories, with an `initially()` of `[]` to indiciate that these will hold modifiers.
 
 ```js
-// create a new CharacterSheet Class
-const TableDungeons = CharacterSheet();
+// holds items that are not actively in use - we'll turn this one off()
+TableDungeons.define('inventory').initially([]).off();
 
-// define a stat
-TableDungeons
+// holds passive talents, on() by default
+TableDungeons.define('passive-talents').initially([]);
 
-  // call it called 'mana'
-  .define('mana')
-  
-  // set its initial value to 100
-  .initially(100)
-  
-  // adds whatever 'intelligence-modifier' is
-  .add('intelligence-modifier');
-```
+// holds items that are actively in use, on() by default
+TableDungeons.define('equipment').initially([]);
 
-## Instantiate a Sheet for a Player
-Once the CharacterSheet system has been fully defined, it's time to create / load character sheets up!
-
-Here is our `CharacterSheet Class`:
-
-```js
-// create a new CharacterSheet Class
-const TableDungeons = CharacterSheet();
-
-// define a stat
-TableDungeons
-
-  // call it called 'mana'
-  .define('mana')
-  
-  // set its initial value to 100
-  .initially(100)
-  
-  // adds whatever 'intelligence-modifier' is
-  .add('intelligence-modifier');
-
-
-TableDungeons
-
-  // character's name
-  .define('character-name')
-
-  // default name
-  .initially('Evil Joe');
-
-
-TableDungeons
-
-  // intelligence is nice
-  .define('intelligence')
-
-  // start players off with 10
-  .initially(10);
-
-
-TableDungeons
-
-  // a modifier we're going to base on intelligence
-  .define('intelligence-modifier')
-
-  // initially 0, and now also explicitly numeric
-  .initially(0)
-
-  // using intelligence to contextualize .forEvery()
-  .using('intelligence')
-
-  // for every 2 intelligence
-  .forEvery(2)
-
-    // rounding down
-    .conservatively()
-
-    // add 1
-    .add(1)
-  
-  // also, subtract 5 from the total
-  .subtract(5);
-```
-
-## Making a **new** character sheet.
-Now that the `TableDungeons` (`CharacterSheet Class`) has been properly defined, we can instiate it for our players.
-
-Stats are easy to set and get using the `StatSelector`.
-
-```js
-// make a new TableDungeons character sheet
-const sirKnight = new TableDungeons();
-
-// using the stat selector, select character-name
-sirKnight('character-name')
-  
-  // set its value to 'JellyDoodle'
-  .is('JellyDoodle');
+// health
+TableDungeons.define('hp').initially(100);
 
 // mana
-const mana = sirKnight('mana').is();
-
-// show the value in console
-console.log(mana); // 100
+TableDungeons.define('mana').initially(250);
 ```
 
-## Advanced Features
-So how do you add **spells**, **items**, and **class skills** to your character? With CharacterSheet all of these modifications are stored inside `Inventories`.
-
-### Defining an Inventory
-Define an `Inventory` on the `CharacterSheet Class`.
+> We'll instantiate our good sir knight
 
 ```js
-TableDungeons
-  
-  // define skills
-  .define('skills')
-
-  // as an empty inventory
-  .initially([]);
+// instantiate a character sheet for a player
+const sirKnight = new TableDungeon();
 ```
 
-### Create `Modifiers` to add to your `Inventories`
-`Modifiers` are added to the `CharacterSheet Instance` (not `Class`). This way they travel with the sheet, but do not impact anyone elses sheet.
-
-Let's define a `modifier`.
+> Let's create some modifiers that `sirKnight` will be able to consume
 
 ```js
-// create a new character sheet for a player
-const sirKnight = new TableDungeons();
-
+// create the Wand of Power
 sirKnight
 
-  // create a new modifier
-  .modifier('holy-rejuvination')
+  // let's give it a descriptive name
+  .modifier('1h/wand-of-power')
 
-  // describe what it modifies when it's active
-  .modifies('intelligence')
+  // and modify mana
+  .modifies('mana')
 
-  // add 2 to intelligence
-  .add(2);
+  // by adding 100 to it
+  .add(100);
+
+// no change - we have to give sirKnight
+// a wand in order for him to gain its bonus
+sirKnight('mana').is(); // 250
 ```
 
-Now let's give `sirKnight` this **spell**. He'll also consume water (which is not represented in the code above, but you get the idea).
+> We'll equip the Wand of Power
 
 ```js
-// access the 'spells' Inventory
-sirKnight('spells')
+// select the equipment inventory
+sirKnight('equipment')
 
-  // contextualizes the quantity
-  .gains(1)
+  // sirKnight will gain 1
+  .give(1)
 
-  // of the modifier given to this inventory
-  .of('holy-rejuvination');
+  // Wand of Power
+  .of('1h/wand-of-power');
 
-
-// an inventory named inventory ;)
-sirKnight('inventory')
-
-  // contextualizes the quantity
-  .loses(2)
-
-  // of the modifier removed from this inventory
-  .of('water');
+// the bonus is now being applied
+sirKnight('mana').is(); // 350
 ```
 
-It's also possible to manipulate which modifiers are actively being consumed. Let's turn off all `fire-charm` modifiers that currently reside in the **spell** `Inventory`.
+> Let's take the wand off for now
 
 ```js
-// access the 'spells' inventory
-sirKnight('spells')
+// select the equipment inventory
+sirKnight('equipment')
+
+  // find the 1h/wand-of-power
+  .findOne('1h/wand-of-power')
+
+  // and move to the inventory
+  .giveTo('inventory');
+
+// because inventory is .off()
+// the Wand of Power no longer
+// affects mana.
+sirKnight('mana').is(); // 250
+```
+
+> The same thing can be done with talents.
+
+```js
+// create the talent: Sturdy and Stout
+sirKnight
+
+  // give it a descriptive namespace
+  .modifier('talent/sturdy-and-stout')
+
+  // modifies hp
+  .modifies('hp')
+
+  // adds 50 to hp
+  .add(50)
+
+  // also modifies mana
+  .modifies('mana')
+
+  // subtracts 50 from mana
+  .subtract(50);
+
+// select sigKnight's equipment
+sirKnight('passive-talent')
   
-  // find only active modifiers
-  .dig(modifier => modifier.active == false)
+  // give 1
+  .give(1)
+  
+  // Study and Stout
+  .of('talent/sturdy-and-stout');
 
-  // that is are a 'fire-charm'
-  .for('fire-charm')
-
-  // map over them, turn them off
-  .map(modifier => modifier.off())
+// it behaves just like the equipment
+// inventory. talents and items are really
+// the same thing. :)~
+sirKnight('hp').is(); // 150
+sirKnight('mana').is(); // 200
 ```
 
 ## Todo
