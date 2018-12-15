@@ -1,4 +1,10 @@
-# Character-Sheet 2.0
+# :game_die: Character-Sheet :game_die:
+
+:crown: Quickly define the relationships between stats.  
+:crown: Manage inventories, talents, equipment, etc.  
+:crown: Create items, skills, buffs.  
+:crown: Save and export modified sheets.
+
 
 ## Getting Started
 
@@ -36,9 +42,10 @@ const TableDungeons = CharacterSheet();
 
 > Creates a `CharacterSheet Instance`. This represents your player or npc.
 
-#### optionalSheet `Object`
-A previously `.export()`'d `CharacterSheet Object`
-
+|                            |                                                    |
+|----------------------------|----------------------------------------------------|
+| **optionalSheet** `Object` | A previously `.export()`'d `CharacterSheet Object` |
+|                            |                                                    |
 
 ```js
 // import the library
