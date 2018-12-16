@@ -1,10 +1,11 @@
-# :game_die: Character-Sheet :game_die:
+# :game_die: Character-Sheet - ALPHA :game_die:
 
 :crown: Quickly define the relationships between stats.  
 :crown: Manage inventories, talents, equipment, etc.  
 :crown: Create items, skills, buffs.  
 :crown: Save and export modified sheets.
 
+:triangular_flag_on_post: This library is **not** ready for consumption, nor is what is described below finalized.
 
 ## Getting Started
 
@@ -22,6 +23,8 @@ import CharacterSheet from 'character-sheet';
 
 You can also import and CharacterSheet Classes that are prebuilt. (@TODO, Link to Contribute)
 
+
+
 ## CharacterSheet Factory
 
 ### `CharacterSheet()`
@@ -36,6 +39,8 @@ import CharacterSheet from 'character-sheet';
 const TableDungeons = CharacterSheet();
 ```
 
+
+
 ## CharacterSheet Class
 
 ### new CharacterSheet(optionalSheet `Object`) -> `ChainableQueryContext`
@@ -44,7 +49,7 @@ const TableDungeons = CharacterSheet();
 
 |                            |                                                    |
 |----------------------------|----------------------------------------------------|
-| **optionalSheet** `Object` | A previously `.export()`'d `CharacterSheet Object` |
+| **optionalSheet** `Object` | A previously exported `CharacterSheet Object`      |
 |                            |                                                    |
 
 ```js
@@ -58,19 +63,156 @@ const TableDungeons = CharacterSheet();
 const sirKnight = new TableDungeon();
 ```
 
-
-
 ### .define(key `String`) -> `ChainableContext`
 
 > Define a new **Stat** on your `CharacterSheet Class`
 
 ### .export() -> `Object`
 
-> Exports a JSON object of the
+> Exports an importable character sheet object which represents all the changes that were made to the character instance.
 
+```js
+// import the library
+import CharacterSheet from 'character-sheet';
 
+// generate a new CharacterSheet Class
+const TableDungeons = CharacterSheet();
+
+// create a new TableDungeons character sheet
+const sirKnight = new TableDungeons();
+
+// export
+const sirKnightExport = sirKnight.export(); 
+
+// since no changes were made to 
+// sirKnight, this remains empty.
+sirKnightExport; // {}
+```
+
+## Inventory
 
 ## Chainables
+
+### .initially(value `Any*`)
+
+> Sets the starting value
+
+**Note**
+- `String`, `Number`, and `Boolean` will behave as stats.
+- `[]` will behave as an `Inventory`
+
+```js
+// import the library
+import CharacterSheet from 'character-sheet';
+
+// generate a new CharacterSheet Class
+const TableDungeons = CharacterSheet();
+
+// define an inventory
+TableDungeons
+  .define('bag-of-holding')
+  .initially([]);
+
+// define a string
+TableDungeons
+  .define('player-name')
+  .initially('');
+
+// define a number
+TableDungeons
+  .define('strength')
+  .initially(10);
+
+// define a boolean
+TableDungeons
+  .define('poisoned')
+  .initially(false);
+```
+
+### .add(value `String`) -> `ChainableContext`
+
+> The **value** represents the name of another **stat**. This will resolve the value of the other stat and add it.
+
+```js
+// import the library
+import CharacterSheet from 'character-sheet';
+
+// generate a new CharacterSheet Class
+const TableDungeons = CharacterSheet();
+
+// a new character sheet
+const sirKnight = new TableDungeons();
+
+// generate a new CharacterSheet Class
+TableDungeons
+
+  // a stat named constitution
+  .define('constitution')
+
+  // initial value of 10
+  .initially(10);
+
+// generate a new CharacterSheet Class
+TableDungeons
+
+  // a stat named hp
+  .define('hp')
+
+  // initially 100
+  .initially(100)
+
+  // + whatever constitutions calculated value is
+  .add('constitution');
+```
+
+### .add(value `Number`) -> `ChainableContext`
+
+> The **value** represents the name of another **stat**. This will resolve the value of the other stat and add it.
+
+```js
+// import the library
+import CharacterSheet from 'character-sheet';
+
+// generate a new CharacterSheet Class
+const TableDungeons = CharacterSheet();
+
+// a new character sheet
+const sirKnight = new TableDungeons();
+
+// add to the CharacterSheet Class
+TableDungeon
+
+  // a stat named constitution
+  .define('constitution')
+
+  // initial value of 10
+  .initially(10);
+
+// add to the character sheet
+sirKnight
+
+  // a new modifier: Eye of the Seeker
+  .modifier('rings/eye-of-the-seeker')
+
+  // modifies constitution
+  .modifies('constitution')
+
+  // by adding 2 to its final calculated value
+  .add(2);
+```
+
+### .subtract(value `String`) -> `ChainableContext`
+
+> See `.add()`. This does that, but subtracts.
+
+### .subtract(value `Number`) -> `ChainableContext`
+
+> See `.add()`. This does that, but subtracts.
+
+### .on() -> `ChainableContext`
+
+### .off() -> `ChainableContext`
+
 
 ## CharacterSheet Object
 
