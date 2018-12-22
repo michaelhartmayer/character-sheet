@@ -1,8 +1,3 @@
-/**
- * Modifier
- *
- * A modifier modifies one or many stat definitions post-calculation.
- */
 declare class Modifier {
     private _description;
     private _operations;

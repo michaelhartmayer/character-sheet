@@ -4,11 +4,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const operations_1 = __importDefault(require("./operations"));
-/**
- * Modifier
- *
- * A modifier modifies one or many stat definitions post-calculation.
- */
 class Modifier {
     constructor() {
         this._description = 'This modifier has no descrition.';
@@ -55,11 +50,8 @@ class Modifier {
         return this;
     }
     static from(modifier) {
-        // make a new modifier
         let m = new Modifier();
-        // import modifier from object
         m.import(modifier);
-        // return modifier
         return m;
     }
     import(modifier) {

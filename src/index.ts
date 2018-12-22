@@ -1,1 +1,2 @@
-export { default } from './CharacterSheet';
+import CharacterSheet from './CharacterSheet';
+export = CharacterSheet;

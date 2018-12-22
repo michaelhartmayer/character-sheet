@@ -15,11 +15,8 @@ class Inventory {
         return this;
     }
     static from(inventory) {
-        // generate a new inventory
         let i = new Inventory();
-        // import inventory from object
         i.import(inventory);
-        // return inventory
         return i;
     }
     get modifiers() {

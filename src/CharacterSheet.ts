@@ -28,11 +28,12 @@ const CharacterSheetFactory = () => {
 			const selectOnSheet = _definitions[selector];
 
 			// select from whatever is available
-			const selectedDefinition = selectOnSheet || selectOnCharacter;
+			// const selectedDefinition = selectOnSheet || selectOnCharacter;
+			const selectedDefinition = selectOnCharacter ? selectOnCharacter : selectOnSheet;
 
 			// no definition for that selector
 			if (!selectedDefinition) {
-				throw Error(`No definitions exist for ${selector}`);
+				throw Error(`No definition exists for ${selector}`);
 				return;
 			}
 
@@ -203,44 +204,5 @@ const CharacterSheetFactory = () => {
 		}
 	};
 };
-
-// const CS = CharacterSheetFactory();
-// const cs = new CS();
-
-// CS.define('constitution')
-// 	.describe('Your physical healthiness.')
-// 	.initially(10);
-
-// // 100 + 10 * 10 = 200
-// CS.define('health')
-// 	.describe('Your health, based on your constitution')
-// 	.initially(100)
-// 	.using('constitution')
-// 	.calculate((v, c) => v + c * 10);
-
-// // inventory: equipment
-// CS.inventory('equipment').describe('Everything you have equipped');
-
-// const shieldOfPower = new Modifier()
-// 	.describe({
-// 		name: 'Shield of Power',
-// 		description: 'A powerful shield'
-// 	})
-// 	.modifies('health')
-// 	.add(45)
-// 	.modifies('someotherthing');
-
-// cs
-// 	.inventory('equipment')
-// 	.give(1)
-// 	.of(shieldOfPower);
-
-// console.log(JSON.stringify(cs.export(), null, 2));
-
-// console.log('Your health is:', cs.get('health').is());
-
-// console.log(JSON.stringify(cs.getSheet(), null, 2));
-
-// console.log(JSON.stringify(cs.export(), null, 2));
 
 export default CharacterSheetFactory;

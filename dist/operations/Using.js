@@ -16,7 +16,6 @@ var Using_1;
 "use strict";
 const RegisterWith_1 = __importDefault(require("./util/RegisterWith"));
 const Operation_1 = __importDefault(require("../Operation"));
-// import Calculate from './Calculate'
 let Using = Using_1 = class Using extends Operation_1.default {
     constructor({ value = null }) {
         super(...arguments);
