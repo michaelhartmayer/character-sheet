@@ -5,8 +5,8 @@
  * @param {Operation} OperationToRegister The class of any operation to register.
  */
 const RegisterWith = OperationBaseClass => OperationToRegister => {
-	OperationBaseClass.registerOperation(OperationToRegister);
-	return OperationToRegister;
+  OperationBaseClass.registerOperation(OperationToRegister);
+  return OperationToRegister;
 };
 
 export default RegisterWith;

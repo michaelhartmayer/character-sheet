@@ -21,6 +21,8 @@ let Modifies = Modifies_1 = class Modifies extends Operation_1.default {
         super(...arguments);
         this.type = 'modifies';
         this._target = null;
+        // @TODO this is a hack for not being able to check the type on an instance.
+        // need something smarter here. this is being used in CharacterSheet.prototype._resolve
         this.modifies = true;
         this._target = target;
     }

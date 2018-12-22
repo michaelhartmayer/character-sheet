@@ -79,8 +79,11 @@ class Definition {
         };
     }
     static from(definition) {
+        // new definition
         const d = new Definition();
+        // import the definition object
         d.import(definition);
+        // return the new definition
         return d;
     }
 }

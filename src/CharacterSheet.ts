@@ -12,8 +12,13 @@ const CharacterSheetFactory = () => {
 		_inventories = {};
 
 		static from(characterSheet) {
+			// create a new character sheet
 			let sheet = new CharacterSheet();
+
+			// import the character sheet data
 			sheet.import(characterSheet);
+
+			// return the instance of that sheet
 			return sheet;
 		}
 

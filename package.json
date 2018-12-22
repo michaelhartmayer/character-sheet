@@ -3,27 +3,36 @@
 	"version": "1.5.1",
 	"description": "CharacterSheet library for assembling relationships between stats and modifiers.",
 	"main": "dist/index.js",
-	"dependencies": {},
+	"dependencies": {
+		"jsdoc": "^3.5.5"
+	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/michaelhartmayer/character-sheet.git"
 	},
 	"devDependencies": {
+		"@types/jest": "^23.3.10",
 		"eslint-plugin-import": "^2.14.0",
-		"jsdoc": "^3.5.5",
-		"jsdocs": "^1.0.0",
+		"jest": "^23.6.0",
 		"latodoc": "smeijer/latodoc",
 		"nodemon": "^1.18.9",
+		"ts-jest": "^23.10.5",
 		"typescript": "^3.2.2"
 	},
-	"keywords": ["Character", "Sheet", "Game", "Dungeons", "Dragons"],
+	"keywords": [
+		"Character",
+		"Sheet",
+		"Game",
+		"Dungeons",
+		"Dragons"
+	],
 	"scripts": {
 		"start": "node ./dist/index.js",
 		"start:dev": "nodemon -w ./src -e ts,js --exec \"yarn build:dev && yarn start\"",
-		"build": "tsc  --removeComments",
+		"build": "npx rimraf ./dist/* && tsc  --removeComments",
 		"build:dev": "tsc",
 		"document": "yarn build:dev && jsdoc ./dist -r -R ./README.md ./docs",
-		"test": "echo \"Error: no test specified\" && exit 1"
+		"test": "jest"
 	},
 	"author": "Michael Hartmayer <michaelhartmayer@gmail.com>",
 	"license": "ISC"
