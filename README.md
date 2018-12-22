@@ -21,83 +21,91 @@ $ yarn add character-sheet
 import CharacterSheet from 'character-sheet';
 ```
 
-You can also import and CharacterSheet Classes that are prebuilt. (@TODO, Link to Contribute)
-
-
-
-## CharacterSheet Factory
-
-### `CharacterSheet()`
-
-> Creates a new `CharacterSheet Class`. This generically represents your game's character sheet rules.
-
+## Make a Character Sheet
 ```js
 // import the library
 import CharacterSheet from 'character-sheet';
 
-// generate a new CharacterSheet Class
-const TableDungeons = CharacterSheet();
-```
-
-
-
-## CharacterSheet Class
-
-### new CharacterSheet(optionalSheet `Object`) -> `ChainableQueryContext`
-
-> Creates a `CharacterSheet Instance`. This represents your player or npc.
-
-|                            |                                                    |
-|----------------------------|----------------------------------------------------|
-| **optionalSheet** `Object` | A previously exported `CharacterSheet Object`      |
-|                            |                                                    |
-
-```js
-// import the library
-import CharacterSheet from 'character-sheet';
-
-// generate a new CharacterSheet Class
+// Generate a new CharacterSheet Class
 const TableDungeons = CharacterSheet();
 
-// instantiate a character sheet for a player
-const sirKnight = new TableDungeon();
-```
+// define constitution
+TableDungeons.define('constitution').initially(10);
 
-### .define(key `String`) -> `ChainableContext`
+// hp is based on constitution
+TableDungeons
+  .define('hp')
+  .initially(25)
+  .using('constitution')
+    .calculate((currentValue, constitution) {
+      return currentValue + constitution * 10;
+    });
 
-> Define a new **Stat** on your `CharacterSheet Class`
-
-### .export() -> `Object`
-
-> Exports an importable character sheet object which represents all the changes that were made to the character instance.
-
-```js
-// import the library
-import CharacterSheet from 'character-sheet';
-
-// generate a new CharacterSheet Class
-const TableDungeons = CharacterSheet();
-
-// create a new TableDungeons character sheet
+// create a sheet for a player / monster
 const sirKnight = new TableDungeons();
 
-// export
-const sirKnightExport = sirKnight.export(); 
-
-// since no changes were made to 
-// sirKnight, this remains empty.
-sirKnightExport; // {}
+// check what sirKnight's hp is
+sirKnight('hp').is(); // 125
 ```
 
-## Inventory
+## Export it
+```js
+// export the sheet as an object
+const exportedSheet = sirKnight.export(); // { constitution: 10, hp: 125 }
+```
 
-## Chainables
+## *Define* API
+> Used to define base stats. Placed on the CharacterSheet instead of the character, these represents all mechanical aspects of a sheet.
 
-### .initially(value `Any*`)
+### Features
+- Define a stat
+  - Describe a stat (`Object`, `Number`, `Boolean`, `String`, `Array`)
+  - Describe an inventory (`Array`)
+  - Prescribe an initial value (`Object`, `Number`, `Boolean`, `String`, `Array`)
+  - Perform math operations in sequential layers
+  - Use dependency injection to calculate absolute values based on other stats
 
-> Sets the starting value
+### Functional Heirarchy
+- define
+  - describe
+  - initially
+    - add
+    - subtract
+    - divideBy
+    - roundUp
+    - roundDown
+    - using
+      - calculate
 
-**Note**
+#### .define(*stat* `String`)
+> Define a new **Stat** on a `CharacterSheet`
+
+```js
+// import the library
+import CharacterSheet from 'character-sheet';
+
+// generate a new CharacterSheet Class
+const TableDungeons = CharacterSheet();
+
+// generate a new CharacterSheet Class
+TableDungeons
+
+  // a stat named constitution
+  .define('player-name')
+
+  // initial value of 10
+  .initially("Anonymous Player");
+
+// a new character sheet
+const sirKnight = new TableDungeons();
+
+// get player name
+sirKnight('player-name').is(); // "Anonymous Player"
+```
+
+#### .initially(*value* `String, Number, Array, or Boolean`)
+> Set the initial value of the stat. The type of value cannot change once set.
+
 - `String`, `Number`, and `Boolean` will behave as stats.
 - `[]` will behave as an `Inventory`
 
@@ -129,9 +137,10 @@ TableDungeons
   .initially(false);
 ```
 
-### .add(value `String`) -> `ChainableContext`
-
-> The **value** represents the name of another **stat**. This will resolve the value of the other stat and add it.
+#### .add | .subtract | .divideBy (*value* `String or Number`)
+> Math.
+- `String` will add the computed value of another stat.
+- `Number` will add a static value.
 
 ```js
 // import the library
@@ -162,64 +171,78 @@ TableDungeons
   .initially(100)
 
   // + whatever constitutions calculated value is
-  .add('constitution');
+  .add('constitution')
+  
+  // + 25
+  .add(25);
 ```
 
-### .add(value `Number`) -> `ChainableContext`
+#### .roundUp(), .roundDown()
+> Make sure any value is a whole number, with the respective rule to describe which way to round.
+- `String` will add the computed value of another stat.
+- `Number` will add a static value.
 
-> The **value** represents the name of another **stat**. This will resolve the value of the other stat and add it.
+@TODO: Add Code Sample
 
-```js
-// import the library
-import CharacterSheet from 'character-sheet';
+## *Inventory* API
+> A storage mechanism that contains modifiers, defined in the CharacterSheet, and accessed on the character.
 
-// generate a new CharacterSheet Class
-const TableDungeons = CharacterSheet();
+### Features
+- Add a modifier of desired quantity
+- Filter through all modifiers
+  - Destroy modifiers
+  - Move modifiers to different inventories
+  - Switch modifiers on and off
+- Switch inventories on and off
 
-// a new character sheet
-const sirKnight = new TableDungeons();
+### Functional Heirarchy
+- give
+  - of
+- filter
+  - destroy
+  - moveTo
+  - on
+  - off
+- on
+- off
 
-// add to the CharacterSheet Class
-TableDungeon
+## *Modifier* Definition API
+> Modifier definitions represent templates of modifiers, that can be added to inventories. They not in effect until added to an inventory that is `on`.
 
-  // a stat named constitution
-  .define('constitution')
+### Features
+- Create a modifier template which can be placed into any inventory
+- Describe which stat to modify and augment it with sequential mathematical operations
+- Switch default on or off
 
-  // initial value of 10
-  .initially(10);
+### Functional Heirarchy
+- modifier
+  - modifies
+    - add
+    - subtract
+    - divideBy
+    - roundDown
+    - roundUp
+    - on
+    - off
 
-// add to the character sheet
-sirKnight
+## *Modifier* API
+> Modifiers are placed exclusively on the character, and not on the CharacterSheet. They represent any mechanical adjustments to stats during computation.
 
-  // a new modifier: Eye of the Seeker
-  .modifier('rings/eye-of-the-seeker')
+### Features
+- Switch on or off
+- Move to another inventory
+- Destroy
+- Duplicate and place in desired inventory
 
-  // modifies constitution
-  .modifies('constitution')
+### Functional Heirachy
+- on
+- off
+- moveTo
+- destroy
+- duplicate
+  - to
 
-  // by adding 2 to its final calculated value
-  .add(2);
-```
-
-### .subtract(value `String`) -> `ChainableContext`
-
-> See `.add()`. This does that, but subtracts.
-
-### .subtract(value `Number`) -> `ChainableContext`
-
-> See `.add()`. This does that, but subtracts.
-
-### .on() -> `ChainableContext`
-
-### .off() -> `ChainableContext`
-
-
-## CharacterSheet Object
-
-
-
-
-## Examples
+## Example Character Sheets
 
 ### Example 1: Dungeons and Dragons - Stat Modifiers
 Let's replicate the functionality of Dungeons and Dragons style stat modifiers. The rule is: whatever your stat is, your stat modifier is that number divided by 2, rounded down, subtract 5.
@@ -418,6 +441,3 @@ sirKnight('passive-talent')
 sirKnight('hp').is(); // 150
 sirKnight('mana').is(); // 200
 ```
-
-## Todo
-- Inventories in inventories. Seriously, what do you do when you find a **bag of holds-a-lot**?
