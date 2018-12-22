@@ -1,41 +1,30 @@
 {
-  "name": "character-sheet",
-  "version": "1.4.3",
-  "description": "CharacterSheet library for assembling relationships between stats and modifiers.",
-  "main": "./dist/character-sheet.js",
-  "scripts": {
-    "build": "babel ./src/ --retain-lines -d dist",
-    "test": "jest --colors"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/michaelhartmayer/character-sheet.git"
-  },
-  "keywords": [
-    "Character",
-    "Sheet",
-    "Game",
-    "Dungeons",
-    "Dragons"
-  ],
-  "author": "Michael Hartmayer <michaelhartmayer@gmail.com>",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/michaelhartmayer/character-sheet/issues"
-  },
-  "homepage": "https://github.com/michaelhartmayer/character-sheet#readme",
-  "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.3",
-    "babel-jest": "^23.6.0",
-    "babel-plugin-transform-class-properties": "^6.24.1",
-    "babel-plugin-transform-es2015-modules-commonjs": "^6.26.2",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-preset-env": "^1.7.0",
-    "jest": "^23.6.0",
-    "regenerator-runtime": "^0.13.1"
-  },
-  "dependencies": {
-    "babel-plugin-transform-runtime": "^6.23.0"
-  }
+	"name": "character-sheet",
+	"version": "1.5.0",
+	"description": "CharacterSheet library for assembling relationships between stats and modifiers.",
+	"main": "dist/index.js",
+	"dependencies": {},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/michaelhartmayer/character-sheet.git"
+	},
+	"devDependencies": {
+		"eslint-plugin-import": "^2.14.0",
+		"jsdoc": "^3.5.5",
+		"jsdocs": "^1.0.0",
+		"latodoc": "smeijer/latodoc",
+		"nodemon": "^1.18.9",
+		"typescript": "^3.2.2"
+	},
+	"keywords": ["Character", "Sheet", "Game", "Dungeons", "Dragons"],
+	"scripts": {
+		"start": "node ./dist/index.js",
+		"start:dev": "nodemon -w ./src -e ts,js --exec \"yarn build:dev && yarn start\"",
+		"build": "tsc  --removeComments",
+		"build:dev": "tsc",
+		"document": "yarn build:dev && jsdoc ./dist -r -R ./README.md ./docs",
+		"test": "echo \"Error: no test specified\" && exit 1"
+	},
+	"author": "Michael Hartmayer <michaelhartmayer@gmail.com>",
+	"license": "ISC"
 }
