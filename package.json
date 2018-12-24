@@ -1,8 +1,8 @@
 {
   "name": "character-sheet",
-  "version": "1.6.1",
+  "version": "1.6.2",
   "description": "CharacterSheet library for assembling relationships between stats and modifiers.",
-  "main": "dist/index.js",
+  "main": "dist/character-sheet.js",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/michaelhartmayer/character-sheet.git"
