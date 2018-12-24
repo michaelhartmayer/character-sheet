@@ -40,7 +40,8 @@
     "Dragons"
   ],
   "scripts": {
-    "build": "npx rimraf ./dist/* && webpack --colors",
+    "clean": "npx rimraf ./dist/*",
+    "build": "yarn clean && webpack --colors",
     "build:prod": "yarn build --config ./config/webpack.prod.config.js",
     "build:dev": "yarn build --config ./config/webpack.dev.config.js",
     "document": "yarn build:dev && jsdoc ./dist -r -R ./README.md ./docs",
