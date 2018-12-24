@@ -8,14 +8,18 @@
     "url": "git+https://github.com/michaelhartmayer/character-sheet.git"
   },
   "devDependencies": {
+    "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
+    "@babel/plugin-transform-regenerator": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.2.3",
     "@babel/plugin-proposal-decorators": "^7.2.3",
     "@babel/plugin-proposal-export-namespace-from": "^7.2.0",
     "@babel/plugin-proposal-throw-expressions": "^7.2.0",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@babel/preset-env": "^7.2.3",
+    "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
+    "babel-jest": "^23.6.0",
     "babel-loader": "^8.0.4",
     "babel-plugin-add-module-exports": "^1.0.0",
     "eslint": "^5.11.0",
@@ -40,7 +44,8 @@
     "build:prod": "yarn build --config ./config/webpack.prod.config.js",
     "build:dev": "yarn build --config ./config/webpack.dev.config.js",
     "document": "yarn build:dev && jsdoc ./dist -r -R ./README.md ./docs",
-    "test": "jest"
+    "test": "jest --colors",
+    "test:dev": "nodemon -w ./src -w ./tests --exec \"yarn test --verbose\""
   },
   "author": "Michael Hartmayer <michaelhartmayer@gmail.com>",
   "license": "ISC",

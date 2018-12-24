@@ -1,4 +1,4 @@
-import Add from '../Add';
+import Add from '../../src/operations/Add.js';
 
 const stubImportableNumber = {
   type: 'add',
