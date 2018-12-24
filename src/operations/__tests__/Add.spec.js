@@ -15,7 +15,7 @@ const mockResolver = name => (name === 'selector' ? 5 : null);
 describe('Operation: Add', () => {
   it('has been wrapped with the RegisterWith decorator', () => {
     // @TODO: whats a good way to test this?
-    console.warn('Operation: Add - Missing Test');
+    // console.warn('Operation: Add - Missing Test');
   });
 
   it('has the correct static type', () => {

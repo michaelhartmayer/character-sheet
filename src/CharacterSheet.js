@@ -7,223 +7,245 @@ const CharacterSheetFactory = () => {
   let _inventories = {};
 
   return class CharacterSheet {
-  _modifiers = {};
-  _inventories = {};
+    _modifiers = {};
+    _inventories = {};
 
-  constructor() {
-    const query = selector => {
-      return this._query(selector);
-    };
+    constructor() {
+      const query = selector => {
+        return this._query(selector);
+      };
 
-    // attach references to all methods
-    Object.getOwnPropertyNames(this.constructor.prototype).forEach(name => {
-      // skip 'private' methods
-      if (/_/.test(name)) return;
+      // attach references to all methods
+      Object.getOwnPropertyNames(this.constructor.prototype).forEach(name => {
+        // skip 'private' methods
+        if (/_/.test(name)) return;
 
-      // bind scope
-      query[name] = this[name].bind(this);
-    });
+        // bind scope
+        query[name] = this[name].bind(this);
+      });
 
-    // return query
-    return query;
-  }
-
-  static from(characterSheet) {
-    // create a new character sheet
-    let sheet = new CharacterSheet();
-
-    // import the character sheet data
-    sheet.import(characterSheet);
-
-    // return the instance of that sheet
-    return sheet;
-  }
-
-  _resolve(selector) {
-    // initial computed value
-    let computedValue = null;
-
-    // find definition on the character sheet
-    const selectOnCharacter = this._modifiers[selector];
-
-    // find definitions (set) on the characte
-    const selectOnSheet = _definitions[selector];
-
-    // select from whatever is available
-    // const selectedDefinition = selectOnSheet || selectOnCharacter;
-    const selectedDefinition = selectOnCharacter ? selectOnCharacter : selectOnSheet;
-
-    // no definition for that selector
-    if (!selectedDefinition) {
-      throw Error(`No definition exists for ${selector}`);
-      return;
+      // return query
+      return query;
     }
 
-    // get the value from either the sheet or the character - set or initialValue
-    computedValue = selectedDefinition.get();
+    static from(characterSheet) {
+      // create a new character sheet
+      let sheet = new CharacterSheet();
 
-    // all sheet operations
-    const sheetOperations = selectOnSheet.operations;
+      // import the character sheet data
+      sheet.import(characterSheet);
 
-    // all character operations
-    const characterOperations = [];
-
-    // find all character operations
-    Object.keys(_inventories).forEach(key => {
-      // an inventory
-      const inventory = this._inventories[key];
-
-      // untouched inventories may be skipped
-      if (!inventory) return;
-
-      // reduce all operations from all modifiers in this inventory
-      const operations = inventory.modifiers.reduce((operations, modifier) => {
-        let affectsSelector = false;
-
-        // reduce all operations on this modifier
-        const validOperations = modifier.operations.reduce((operations, operation) => {
-          // found a modifies operation
-          if (operation.type === 'modifies') {
-            affectsSelector = operation.target === selector;
-          }
-
-          // not modifying the right selector
-          if (!affectsSelector) return operations;
-
-          return [...operations, operation];
-        }, []);
-
-        return operations.concat(validOperations);
-      }, []);
-
-      characterOperations.push(...operations);
-    });
-
-    // compute all operations
-    computedValue = [...sheetOperations, ...characterOperations].reduce((value, operation) => {
-      return operation.transform(value, this._resolve.bind(this));
-    }, computedValue);
-
-    // return computed value
-    return computedValue;
-  }
-
-  _set(selector, value) {
-    let d;
-
-    if (this._modifiers[selector]) {
-      d = this._modifiers[selector];
-    } else {
-      d = new Definition();
-      this._modifiers[selector] = d;
+      // return the instance of that sheet
+      return sheet;
     }
 
-    // set the value
-    d.set(value);
+    _resolve(selector) {
+      // initial computed value
+      let computedValue = null;
 
-    // return it
-    return d;
-  }
+      // find definition on the character sheet
+      const selectOnCharacter = this._modifiers[selector];
 
-  _query(selector) {
-    return {
-      is: value => {
-        // get
-        if (!value) return this._resolve(selector);
+      // find definitions (set) on the characte
+      const selectOnSheet = _definitions[selector];
 
-        // set
-        this._set(selector, value);
+      // select from whatever is available
+      // const selectedDefinition = selectOnSheet || selectOnCharacter;
+      const selectedDefinition = selectOnCharacter
+        ? selectOnCharacter
+        : selectOnSheet;
+
+      // no definition for that selector
+      if (!selectedDefinition) {
+        throw Error(`No definition exists for ${selector}`);
+        return;
       }
-    };
-  }
 
-  static define(key) {
-    // new definition
-    const d = new Definition();
+      // get the value from either the sheet or the character - set or initialValue
+      computedValue = selectedDefinition.get();
 
-    // attach to sheet
-    _definitions[key] = d;
+      // all sheet operations
+      const sheetOperations = selectOnSheet.operations;
 
-    // return definition reference
-    return d;
-  }
+      // all character operations
+      const characterOperations = [];
 
-  static inventory(key) {
-    const i = new Inventory();
+      // find all character operations
+      Object.keys(_inventories).forEach(key => {
+        // an inventory
+        const inventory = this._inventories[key];
 
-    _inventories[key] = i;
+        // untouched inventories may be skipped
+        if (!inventory) return;
 
-    return i;
-  }
+        // reduce all operations from all modifiers in this inventory
+        const operations = inventory.modifiers.reduce(
+          (operations, modifier) => {
+            let affectsSelector = false;
 
-  inventory(key) {
-    // inventory does not exist
-    if (!(key in _inventories))
-      throw Error(`${key} is not an inventory. You must define an inventory on the sheet.`);
+            // reduce all operations on this modifier
+            const validOperations = modifier.operations.reduce(
+              (operations, operation) => {
+                // found a modifies operation
+                if (operation.type === 'modifies') {
+                  affectsSelector = operation.target === selector;
+                }
 
-    // if the inventory already exists, return it
-    if (this._inventories[key]) {
-      return this._inventories[key];
+                // not modifying the right selector
+                if (!affectsSelector) return operations;
+
+                return [...operations, operation];
+              },
+              []
+            );
+
+            return operations.concat(validOperations);
+          },
+          []
+        );
+
+        characterOperations.push(...operations);
+      });
+
+      // compute all operations
+      computedValue = [...sheetOperations, ...characterOperations].reduce(
+        (value, operation) => {
+          return operation.transform(value, this._resolve.bind(this));
+        },
+        computedValue
+      );
+
+      // return computed value
+      return computedValue;
     }
 
-    // generate an inventory on the character
-    const i = new Inventory();
+    _set(selector, value) {
+      let d;
 
-    // store it
-    this._inventories[key] = i;
+      if (this._modifiers[selector]) {
+        d = this._modifiers[selector];
+      } else {
+        d = new Definition();
+        this._modifiers[selector] = d;
+      }
 
-    // return it
-    return i;
-  }
+      // set the value
+      d.set(value);
 
-  import(characterData) {
-    // @TODO: Import
-  }
+      // return it
+      return d;
+    }
 
-  export() {
-    // @TODO: Export
-    const sheet = {};
-    const character = {};
-    const inventories = {};
+    _query(selector) {
+      return {
+        is: value => {
+          // get
+          if (!value) return this._resolve(selector);
 
-    // sheet
-    Object.keys(_definitions).forEach(key => (sheet[key] = _definitions[key].export()));
+          // set
+          this._set(selector, value);
+        }
+      };
+    }
 
-    // character
-    Object.keys(this._modifiers).forEach(key => (character[key] = this._modifiers[key].export()));
+    static define(key) {
+      // new definition
+      const d = new Definition();
 
-    // inventories
-    Object.keys(this._inventories).forEach(key => {
-      inventories[key] = this._inventories[key].export();
-    });
+      // attach to sheet
+      _definitions[key] = d;
 
-    return {
-      version: 1,
-      sheet,
-      character,
-      inventories
-    };
-  }
+      // return definition reference
+      return d;
+    }
 
-  getSheet() {
-    const inventories = {};
-    const stats = {};
+    static inventory(key) {
+      const i = new Inventory();
 
-    // render inventories
-    Object.keys(_inventories).forEach(key => {
-      inventories[key] = this.inventory(key).map(modifier => modifier.description);
-    });
+      _inventories[key] = i;
 
-    // render definitions
-    Object.keys(_definitions).forEach(key => {
-      stats[key] = { value: this._resolve(key), description: _definitions[key].description };
-    });
+      return i;
+    }
 
-    return {
-      inventories,
-      stats
-    };
-  }
+    inventory(key) {
+      // inventory does not exist
+      if (!(key in _inventories))
+        throw Error(
+          `${key} is not an inventory. You must define an inventory on the sheet.`
+        );
+
+      // if the inventory already exists, return it
+      if (this._inventories[key]) {
+        return this._inventories[key];
+      }
+
+      // generate an inventory on the character
+      const i = new Inventory();
+
+      // store it
+      this._inventories[key] = i;
+
+      // return it
+      return i;
+    }
+
+    import(characterData) {
+      // @TODO: Import
+    }
+
+    export() {
+      // @TODO: Export
+      const sheet = {};
+      const character = {};
+      const inventories = {};
+
+      // sheet
+      Object.keys(_definitions).forEach(
+        key => (sheet[key] = _definitions[key].export())
+      );
+
+      // character
+      Object.keys(this._modifiers).forEach(
+        key => (character[key] = this._modifiers[key].export())
+      );
+
+      // inventories
+      Object.keys(this._inventories).forEach(key => {
+        inventories[key] = this._inventories[key].export();
+      });
+
+      return {
+        version: 1,
+        sheet,
+        character,
+        inventories
+      };
+    }
+
+    getSheet() {
+      const inventories = {};
+      const stats = {};
+
+      // render inventories
+      Object.keys(_inventories).forEach(key => {
+        inventories[key] = this.inventory(key).map(
+          modifier => modifier.description
+        );
+      });
+
+      // render definitions
+      Object.keys(_definitions).forEach(key => {
+        stats[key] = {
+          value: this._resolve(key),
+          description: _definitions[key].description
+        };
+      });
+
+      return {
+        inventories,
+        stats
+      };
+    }
   };
 };
 

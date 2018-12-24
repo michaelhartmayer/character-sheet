@@ -7,4 +7,13 @@ import RoundDown from './RoundDown';
 import DivideBy from './DivideBy';
 import Modifies from './Modifies';
 
-export default { Add, Subtract, Using, Calculate, RoundUp, RoundDown, DivideBy, Modifies };
+export default {
+  Add,
+  Subtract,
+  Using,
+  Calculate,
+  RoundUp,
+  RoundDown,
+  DivideBy,
+  Modifies
+};

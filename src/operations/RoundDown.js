@@ -3,24 +3,24 @@ import Operation from '../Operation';
 
 // @RegisterWith(Operation)
 class RoundDown extends Operation {
-	static type = 'round-down';
+  static type = 'round-down';
 
-	static from(addOperation) {
-	  let o = new RoundDown();
-	  return o;
-	}
+  static from(addOperation) {
+    let o = new RoundDown();
+    return o;
+  }
 
-	import() {}
+  import() {}
 
-	export() {
-	  return {
-	    type: RoundDown.type
-	  };
-	}
+  export() {
+    return {
+      type: RoundDown.type
+    };
+  }
 
-	transform(value, resolver) {
-	  return Math.floor(value);
-	}
+  transform(value, resolver) {
+    return Math.floor(value);
+  }
 }
 
 export default RegisterWith(Operation)(RoundDown);

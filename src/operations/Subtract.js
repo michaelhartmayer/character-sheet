@@ -3,38 +3,38 @@ import Operation from '../Operation';
 
 // @RegisterWith(Operation)
 class Subtract extends Operation {
-	static type = 'subtract';
+  static type = 'subtract';
 
-	_value = null;
+  _value = null;
 
-	constructor({ value = null }) {
-	  super(...arguments);
-	  this._value = value;
-	}
+  constructor({ value = null }) {
+    super(...arguments);
+    this._value = value;
+  }
 
-	static from(addOperation) {
-	  let o = new Subtract({ value: addOperation.value });
-	  return o;
-	}
+  static from(addOperation) {
+    let o = new Subtract({ value: addOperation.value });
+    return o;
+  }
 
-	import(addOperation) {
-	  this._value = addOperation.value;
-	}
+  import(addOperation) {
+    this._value = addOperation.value;
+  }
 
-	export() {
-	  return {
-	    type: Subtract.type,
-	    value: this._value
-	  };
-	}
+  export() {
+    return {
+      type: Subtract.type,
+      value: this._value
+    };
+  }
 
-	transform(value, resolver) {
-	  if (typeof this._value === 'string') {
-	    return value - resolver(this._value);
-	  }
+  transform(value, resolver) {
+    if (typeof this._value === 'string') {
+      return value - resolver(this._value);
+    }
 
-	  return value - this._value;
-	}
+    return value - this._value;
+  }
 }
 
 export default RegisterWith(Operation)(Subtract);
