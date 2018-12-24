@@ -1,23 +1,32 @@
 {
 	"name": "character-sheet",
-	"version": "1.5.1",
+	"version": "1.6.0",
 	"description": "CharacterSheet library for assembling relationships between stats and modifiers.",
 	"main": "dist/index.js",
-	"dependencies": {
-		"jsdoc": "^3.5.5"
-	},
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/michaelhartmayer/character-sheet.git"
 	},
 	"devDependencies": {
-		"@types/jest": "^23.3.10",
-		"eslint-plugin-import": "^2.14.0",
+		"@babel/core": "^7.2.2",
+		"@babel/plugin-proposal-class-properties": "^7.2.3",
+		"@babel/plugin-proposal-decorators": "^7.2.3",
+		"@babel/plugin-proposal-export-namespace-from": "^7.2.0",
+		"@babel/plugin-proposal-throw-expressions": "^7.2.0",
+		"@babel/plugin-syntax-dynamic-import": "^7.2.0",
+		"@babel/preset-env": "^7.2.3",
+		"babel-eslint": "^10.0.1",
+		"babel-loader": "^8.0.4",
+		"babel-plugin-add-module-exports": "^1.0.0",
+		"eslint": "^5.11.0",
+		"eslint-plugin-babel": "^5.3.0",
+		"eslint-plugin-jest": "^22.1.2",
 		"jest": "^23.6.0",
+		"jsdoc": "^3.5.5",
 		"latodoc": "smeijer/latodoc",
 		"nodemon": "^1.18.9",
-		"ts-jest": "^23.10.5",
-		"typescript": "^3.2.2"
+		"webpack": "^4.28.2",
+		"webpack-cli": "^3.1.2"
 	},
 	"keywords": [
 		"Character",
@@ -27,13 +36,13 @@
 		"Dragons"
 	],
 	"scripts": {
-		"start": "node ./dist/index.js",
-		"start:dev": "nodemon -w ./src -e ts,js --exec \"yarn build:dev && yarn start\"",
-		"build": "npx rimraf ./dist/* && tsc  --removeComments",
-		"build:dev": "tsc",
+		"build": "npx rimraf ./dist/* && webpack --colors",
+		"build:prod": "yarn build --config ./config/webpack.prod.config.js",
+		"build:dev": "yarn build --config ./config/webpack.dev.config.js",
 		"document": "yarn build:dev && jsdoc ./dist -r -R ./README.md ./docs",
 		"test": "jest"
 	},
 	"author": "Michael Hartmayer <michaelhartmayer@gmail.com>",
-	"license": "ISC"
+	"license": "ISC",
+	"dependencies": {}
 }

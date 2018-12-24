@@ -1,9 +1,11 @@
 module.exports = {
 	env: {
+		commonjs: true,
 		browser: true,
 		es6: true
 	},
 	extends: 'eslint:recommended',
+	parser: 'babel-eslint',
 	parserOptions: {
 		ecmaVersion: 6,
 		sourceType: 'module',
@@ -12,8 +14,11 @@ module.exports = {
 		}
 	},
 	rules: {
-		'linebreak-style': ['error', 'unix'],
+		'linebreak-style': ['error', 'windows'],
 		quotes: ['error', 'single'],
-		semi: ['error', 'always']
-	}
+		semi: ['error', 'always'],
+		indent: ['error', 2],
+		'babel/semi': 1
+	},
+	plugins: ['babel', 'jest']
 };
