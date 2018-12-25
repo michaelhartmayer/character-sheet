@@ -1,7 +1,6 @@
 import RegisterWith from './util/RegisterWith';
 import Operation from '../Operation';
 
-// @RegisterWith(Operation)
 class Calculate extends Operation {
   static type = 'calculate';
 
@@ -21,20 +20,20 @@ class Calculate extends Operation {
   }
 
   import(addOperation) {
-    this._fn = addOperation.fn;
+    this._fn = Function(addOperation.fn);
+    this._selectors = addOperation.selectors;
   }
 
   export() {
     return {
       type: Calculate.type,
       selectors: this._selectors,
-      fn: Function(this._fn)
+      fn: this._fn.toString()
     };
   }
 
   transform(value, resolver) {
     return this._fn(value, ...this._selectors.map(resolver));
-    return value;
   }
 }
 
