@@ -2,6 +2,11 @@ import RegisterWith from './util/RegisterWith';
 import Operation from '../Operation';
 // import Calculate from './Calculate'
 
+/**
+ * NOTE: CURRENTLY OBSOLETE! USING IS BAKED INTO DEFINITION
+ * MAY WANT TO MOVE THIS BACK TO HERE
+ */
+
 // @RegisterWith(Operation)
 class Using extends Operation {
   static type = 'using';

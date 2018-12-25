@@ -82,7 +82,7 @@ class Modifier {
   export() {
     return {
       description: this._description,
-      operations: this._operations,
+      operations: this._operations.map(operation => operation.export()),
       active: this._active
     };
   }

@@ -13,7 +13,7 @@
 class Operation {
   /**
    * Key-value store of modules and their types
-   *
+   * @static
    * @property {object} _registeredOperations
    */
   static _registeredOperations = {};
@@ -22,6 +22,8 @@ class Operation {
    * Operation Type
    *
    * Identifies the operation in its definition.
+   * @static
+   * @param {String}
    */
   static type = null;
 
@@ -47,6 +49,7 @@ class Operation {
   /**
    * Generate a operation instance from its definition.
    *
+   * @static
    * @param {OperationDefinition} operationDefinition A operation definition
    */
   static from(operationDefinition) {

@@ -1,11 +1,23 @@
 import RegisterWith from './util/RegisterWith';
 import Operation from '../Operation';
 
+/**
+ * Transform the value by adding to it. 
+ */
 class Add extends Operation {
+  /**
+   * @static
+   * @param type {String}
+   */
   static type = 'add';
 
   _value = null;
 
+  /**
+   * @constructor 
+   * @param {Object} Settings Configuration for the operation.
+   * @param {String | Number} Settings.value Adds a number or the calculated value of another selector
+   */
   constructor({ value = null }) {
     super(...arguments);
     this._value = value;
