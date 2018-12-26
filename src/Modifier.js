@@ -1,9 +1,7 @@
 import Op from './operations';
 
 /**
- * Modifier
- *
- * A modifier modifies one or many stat definitions post-calculation.
+ * Modifies a stat definition during calculation.
  */
 class Modifier {
   _description = 'This modifier has no descrition.';
@@ -16,13 +14,13 @@ class Modifier {
     return this._operations;
   }
 
+  get description() {
+    return this._description;
+  }
+
   describe(description) {
     this._description = description;
     return this;
-  }
-
-  get description() {
-    return this._description;
   }
 
   modifies(target) {

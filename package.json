@@ -1,6 +1,6 @@
 {
   "name": "character-sheet",
-  "version": "1.7.0",
+  "version": "1.7.1",
   "description": "CharacterSheet library for assembling relationships between stats and modifiers.",
   "main": "dist/character-sheet.js",
   "repository": {
@@ -10,12 +10,12 @@
   "devDependencies": {
     "@babel/cli": "^7.2.3",
     "@babel/core": "^7.2.2",
-    "@babel/plugin-transform-regenerator": "^7.0.0",
     "@babel/plugin-proposal-class-properties": "^7.2.3",
     "@babel/plugin-proposal-decorators": "^7.2.3",
     "@babel/plugin-proposal-export-namespace-from": "^7.2.0",
     "@babel/plugin-proposal-throw-expressions": "^7.2.0",
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
+    "@babel/plugin-transform-regenerator": "^7.0.0",
     "@babel/preset-env": "^7.2.3",
     "babel-core": "^7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",

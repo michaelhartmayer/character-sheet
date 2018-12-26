@@ -12,13 +12,13 @@ class Subtract extends Operation {
     this._value = value;
   }
 
-  static from(addOperation) {
-    let o = new Subtract({ value: addOperation.value });
+  static from(subtractOperation) {
+    let o = new Subtract({ value: subtractOperation.value });
     return o;
   }
 
-  import(addOperation) {
-    this._value = addOperation.value;
+  import(subtractOperation) {
+    this._value = subtractOperation.value;
   }
 
   export() {

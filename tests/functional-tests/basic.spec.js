@@ -3,8 +3,8 @@ import CharacterSheet from '../../src/';
 const DummySheet = CharacterSheet();
 
 DummySheet.define('int').describe({
-  name: "Intelligence",
-  description: "A measure of cognitive ability."
+  name: 'Intelligence',
+  description: 'A measure of cognitive ability.'
 }).initially(0);
 
 DummySheet.define('mana').describe({

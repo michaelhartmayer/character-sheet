@@ -81,9 +81,9 @@ class Inventory {
 
     // if there are modifiers present
     // if (inventory.modifiers) {
-      this._modifiers = inventory.modifiers.map(modifier =>
-        Modifier.from(modifier)
-      );
+    this._modifiers = inventory.modifiers.map(modifier =>
+      Modifier.from(modifier)
+    );
     // }
 
     // other static properties

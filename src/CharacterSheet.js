@@ -190,7 +190,7 @@ const CharacterSheetFactory = () => {
     }
 
     import(characterData) {
-      const { character, inventories } = characterData
+      const { character, inventories } = characterData;
 
       // this._inventories = inventories.map(inventory => Inventory.from(inventory));
       // this._modifiers = character.map(definition => Definition.from(definition));
