@@ -15,10 +15,22 @@
 $ yarn add character-sheet
 ```
 
+or
+
+```sh
+$ npm i character-sheet
+```
+
 > Import it into your project
 
 ```js
 import CharacterSheet from 'character-sheet';
+```
+
+or
+
+```js
+const CharacterSheet = require('character-sheet');
 ```
 
 ## Make a Character Sheet
