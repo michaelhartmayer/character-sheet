@@ -1,6 +1,6 @@
 {
   "name": "character-sheet",
-  "version": "1.7.2",
+  "version": "1.7.3",
   "description": "CharacterSheet library for assembling relationships between stats and modifiers.",
   "main": "dist/character-sheet.js",
   "repository": {
