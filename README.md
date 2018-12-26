@@ -72,7 +72,7 @@ const sirKnight = new TableDungeons();
 sirKnight('hp').is(); // 125
 ```
 
-## Save My Character
+## Save a Character
 After a sheet has been designed, and a character created, it can be exported and stored.
 
 ```js
