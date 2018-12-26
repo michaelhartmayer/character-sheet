@@ -8,7 +8,7 @@ cache:
 notifications:
   email: true
 node_js:
-- '8'
+  - '8'
 deploy:
   provider: npm
   email: "michaelhartmayer@gmail.com"
