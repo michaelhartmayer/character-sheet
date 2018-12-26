@@ -39,7 +39,7 @@ describe('Inventory', () => {
     describe('.describe()', () => {
         it('sets the description of the inventory', () => {
             inventory.describe('abc');
-            // expect(inventory._description).toBe('abc');
+            expect(inventory._description).toBe('abc');
         });
     });
 
