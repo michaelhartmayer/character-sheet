@@ -54,7 +54,7 @@ TableDungeons
   .define('hp')
   .initially(0)
   .using('constitution')
-    .calculate((currentValue, constitution) {
+    .calculate((currentValue, constitution) => {
       return currentValue + constitution * 10;
     });
 ```
